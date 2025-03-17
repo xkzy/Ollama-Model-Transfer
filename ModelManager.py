@@ -59,7 +59,7 @@ TEMPLATE """ + '"""' + f"""{template}""" + '"""' + "\n"
     print(f'Model file created: {output_file}')
     
     modelfile_message = modelfile_message.strip()
-    model_file_location_match = re.search(fr'FROM\s+({re.escape(Ollama_Model_Folder)}[^\s]*)', modelfile_message, re.MULTILINE)
+    model_file_location_match = re.search(fr'FROM\s+({re.escape(str(Ollama_Model_Folder))}[^\s]*)', modelfile_message, re.MULTILINE)
     extracted_model_file_location = model_file_location_match.group(1) if model_file_location_match else "Model_file_location_not_found"
     
     print(f"Model gguf file found: {extracted_model_file_location}")
@@ -85,6 +85,9 @@ def extract_names(data):
     lines = data.strip().split('\n')
     names = [line.split()[0] for line in lines[1:]]
     return ';;;'.join(names)
+
+def detect_ollama_model_folder():
+    return os.path.join(os.path.expanduser("~"), ".ollama", "models")
 
 def process_models(model_names):
     for model_name in model_names:
@@ -152,7 +155,7 @@ def main():
             model_name = model_name.strip()
             output_file = "ModelFile"
             Ollama_Model_Folder = detect_ollama_model_folder()
-            BackUp_FFolder = os.path.join(".", "llama_backup")
+            BackUp_Folder = os.path.join(".", "llama_backup")
             if not os.path.exists(BackUp_Folder):
                 os.makedirs(BackUp_Folder)
                 print(f"Created backup folder: {BackUp_Folder}")
