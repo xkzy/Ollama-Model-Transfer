@@ -19,19 +19,24 @@ A Python utility for managing and dumping Ollama models.
 
 ## Usage
 
-You can execute the script directly from the command line:
+You can execute the script directly from the command line with the following commands:
 
+### Backup all models
 ```bash
-python ModelManager.py
+python ModelManager.py backup
 ```
 
-The script can be executed with or without an argument. If an argument is provided, it should be the name of the model you want to manage. For example:
-
+### Export a specific model
 ```bash
-python ModelManager.py deepseek-coder-base
+python ModelManager.py export deepseek-coder-base
 ```
 
-This will manage the specified model. If no argument is provided, the script will manage all models.
+### Import models from a backup folder
+```bash
+python ModelManager.py import /path/to/backup/folder
+```
+
+If no arguments are provided, the script will prompt you with an interactive menu to choose an action.
 
 ## License
 
