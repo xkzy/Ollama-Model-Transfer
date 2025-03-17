@@ -32,10 +32,10 @@ manager.dump_models()
 You can also execute the script directly from the command line:
 
 ```bash
-python ModelManager.py [arg]
+python ModelManager.py
 ```
 
-Replace `[arg]` with an optional argument if needed.
+The script can be executed with or without an argument.
 
 ## License
 
