@@ -19,17 +19,7 @@ A Python utility for managing and dumping Ollama models.
 
 ## Usage
 
-```python
-from ModelManager import ModelManager
-
-# Initialize model manager
-manager = ModelManager()
-
-# Dump models
-manager.dump_models()
-```
-
-You can also execute the script directly from the command line:
+You can execute the script directly from the command line:
 
 ```bash
 python ModelManager.py
