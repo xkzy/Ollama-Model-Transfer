@@ -1,0 +1,3 @@
+FROM deepseek-coder-base.gguf
+TEMPLATE """{{ .Prompt }}"""
+system ""
