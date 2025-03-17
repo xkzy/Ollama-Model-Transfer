@@ -29,6 +29,14 @@ manager = ModelManager()
 manager.dump_models()
 ```
 
+You can also execute the script directly from the command line:
+
+```bash
+python ModelManager.py [arg]
+```
+
+Replace `[arg]` with an optional argument if needed.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
