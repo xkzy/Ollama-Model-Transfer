@@ -8,7 +8,7 @@ def sanitize_filename_MF(name):
     return re.sub(r'[<>:"/\\|?*.]', '-', name)
 
 def run_command(command):
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, text=True, creationflags=subprocess.CREATE_NO_WINDOW, encoding='utf-8')
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, text=True, encoding='utf-8')
 
     output_text, error_text = process.communicate()
 
@@ -92,10 +92,10 @@ def process_models(model_names):
         #****************************************************************
         #****************************************************************
         # Your ollama model folder:
-        Ollama_Model_Folder = r"C:\Users\%USERNAME%\.ollama\models"
+        Ollama_Model_Folder = os.path.join(os.path.expanduser("~"), ".ollama", "models")
         
         # Where you want to back up your models:
-        BackUp_Folder = r".\llama_backup"
+        BackUp_Folder = os.path.join(".", "llama_backup")
         #****************************************************************
         #****************************************************************
         #****************************************************************
