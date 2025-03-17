@@ -136,8 +136,11 @@ def process_models(model_names):
         model_name = model_name.strip()
         print(model_name)
         output_file = "ModelFile"
-        Ollama_Model_Folder = input("Enter Ollama model folder path: ")
-        BackUp_Folder = input("Enter backup folder path: ")
+        Ollama_Model_Folder = detect_ollama_model_folder()
+        BackUp_Folder = os.path.join(".", "llama_backup")
+        if not os.path.exists(BackUp_Folder):
+            os.makedirs(BackUp_Folder)
+            print(f"Created backup folder: {BackUp_Folder}")
         create_ollama_model_file(model_name, output_file, BackUp_Folder, Ollama_Model_Folder)
 
 if __name__ == "__main__":
