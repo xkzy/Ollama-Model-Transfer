@@ -92,7 +92,26 @@ def process_models(model_names):
         #****************************************************************
         #****************************************************************
         # Your ollama model folder:
-        Ollama_Model_Folder = os.path.join(os.path.expanduser("~"), ".ollama", "models")
+        def detect_ollama_model_folder():
+            # Try to get the model path from the ollama CLI
+            try:
+                result = subprocess.run(["ollama", "show", "--modelfile", "dummy"], capture_output=True, text=True, encoding='utf-8')
+                if result.returncode == 0:
+                    # Extract the model path from the output
+                    match = re.search(r'FROM\s+([^\s]+)', result.stdout)
+                    if match:
+                        model_path = match.group(1)
+                        # Return the parent directory of the model file
+                        return os.path.dirname(model_path)
+            except Exception as e:
+                print(f"Warning: Could not detect model location from ollama CLI: {e}")
+
+            # Fallback to default location
+            default_location = os.path.join(os.path.expanduser("~"), ".ollama", "models")
+            print(f"Using default model location: {default_location}")
+            return default_location
+
+        Ollama_Model_Folder = detect_ollama_model_folder()
         
         # Where you want to back up your models:
         BackUp_Folder = os.path.join(".", "llama_backup")
