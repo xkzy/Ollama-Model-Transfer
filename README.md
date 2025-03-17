@@ -25,7 +25,13 @@ You can execute the script directly from the command line:
 python ModelManager.py
 ```
 
-The script can be executed with or without an argument.
+The script can be executed with or without an argument. If an argument is provided, it should be the name of the model you want to manage. For example:
+
+```bash
+python ModelManager.py deepseek-coder-base
+```
+
+This will manage the specified model. If no argument is provided, the script will manage all models.
 
 ## License
 
