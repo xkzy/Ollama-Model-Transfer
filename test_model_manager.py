@@ -1,4 +1,5 @@
 import pytest
+from unittest.mock import patch, MagicMock
 from ModelManager import sanitize_filename_MF, run_command, create_ollama_model_file, scan_folder, process_models
 
 def test_sanitize_filename_MF():
