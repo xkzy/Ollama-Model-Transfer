@@ -72,5 +72,5 @@ def test_process_models(mock_detect, mock_create, tmp_path, monkeypatch):
     process_models(model_names)
     
     assert mock_create.call_count == 2
-    mock_create.assert_any_call("model1", "ModelFile", str(BackUp_Folder), str(tmp_path/"models"))
-    mock_create.assert_any_call("model2", "ModelFile", str(BackUp_Folder), str(tmp_path/"models"))
+    mock_create.assert_any_call("model1", "ModelFile", "./llama_backup", str(tmp_path/"models"))
+    mock_create.assert_any_call("model2", "ModelFile", "./llama_backup", str(tmp_path/"models"))
