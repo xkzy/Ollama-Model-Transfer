@@ -63,7 +63,8 @@ def test_scan_folder(mock_run, mock_walk, tmp_path):
 
 @patch("ModelManager.create_ollama_model_file")
 @patch("ModelManager.detect_ollama_model_folder")
-def test_process_models(mock_detect, mock_create, tmp_path):
+def test_process_models(mock_detect, mock_create, tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
     mock_detect.return_value = str(tmp_path/"models")
     BackUp_Folder = tmp_path/"llama_backup"
     
