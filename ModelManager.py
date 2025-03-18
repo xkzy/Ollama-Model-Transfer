@@ -33,9 +33,9 @@ def create_ollama_model_file(model_name, output_file, BackUp_Folder, Ollama_Mode
     model_name = sanitize_filename_MF(model_name)
     new_folder_path = os.path.join(BackUp_Folder, model_name)
 
-    if os.path.exists(new_folder_path) and os.path.isdir(new_folder_path):
-        print(f"Model: '{model_name}' already exists in the backup folder, so it will be skipped.")
-        return
+    # if os.path.exists(new_folder_path) and os.path.isdir(new_folder_path):
+    #     print(f"Model: '{model_name}' already exists in the backup folder, so it will be skipped.")
+    #     return
 
     if not os.path.exists(new_folder_path):
         os.makedirs(new_folder_path)
