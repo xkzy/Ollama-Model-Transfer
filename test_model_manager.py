@@ -5,9 +5,17 @@ def test_sanitize_filename_MF():
     assert sanitize_filename_MF("test:latest") == "test"
     assert sanitize_filename_MF("test<>:*?") == "test-----"
 
-def test_run_command():
-    result = run_command("echo hello")
-    assert result == "hello"
+@patch("ModelManager.subprocess.Popen")
+def test_run_command(mock_popen):
+    # Test successful command
+    mock_process = MagicMock()
+    mock_process.communicate.return_value = ("hello\n", "")
+    mock_popen.return_value = mock_process
+    assert run_command("echo hello") == "hello"
+    
+    # Test command with stderr
+    mock_process.communicate.return_value = ("", "error")
+    assert run_command("invalid_command") == ""
 
 from unittest.mock import patch
 
@@ -19,22 +27,44 @@ def test_create_ollama_model_file(tmp_path):
 
     with patch("ModelManager.run_command") as mock_run_command:
         mock_run_command.side_effect = [
-            "template content",  # Mock template
-            "parameter1\nparameter2",  # Mock parameters
-            "system message",  # Mock system message
-            "FROM /path/to/model.gguf",  # Mock modelfile
+            "template content",
+            "parameter1\nparameter2", 
+            "system message",
+            "FROM /path/to/model.gguf",
         ]
         create_ollama_model_file(model_name, output_file, BackUp_Folder, Ollama_Model_Folder)
-        assert (BackUp_Folder / model_name / output_file).exists()
+        
+        target_file = BackUp_Folder / model_name / output_file
+        assert target_file.exists()
+        
+        expected_content = '''FROM test_model.gguf
+TEMPLATE """template content"""
+PARAMETER parameter1
+PARAMETER parameter2
+system "system message"
+'''
+        assert target_file.read_text() == expected_content
 
-def test_scan_folder(tmp_path):
-    model_folder = tmp_path / "model"
-    model_folder.mkdir()
-    (model_folder / "test.gguf").touch()
+@patch("ModelManager.os.walk")
+@patch("ModelManager.subprocess.run")
+def test_scan_folder(mock_run, mock_walk, tmp_path):
+    mock_walk.return_value = [
+        (str(tmp_path/"model"), [], ["test.gguf"])
+    ]
+    
     scan_folder(tmp_path)
-    # Add assertions based on expected behavior
+    
+    mock_run.assert_called_once_with(
+        'ollama create model -f modelfile',
+        shell=True,
+        cwd=str(tmp_path/"model")
+    )
 
-def test_process_models(tmp_path):
+@patch("ModelManager.create_ollama_model_file")
+def test_process_models(mock_create, tmp_path):
     model_names = ["model1", "model2"]
     process_models(model_names)
-    # Add assertions based on expected behavior
+    
+    assert mock_create.call_count == 2
+    mock_create.assert_any_call("model1", "ModelFile", tmp_path/"backup", tmp_path/"models")
+    mock_create.assert_any_call("model2", "ModelFile", tmp_path/"backup", tmp_path/"models")
