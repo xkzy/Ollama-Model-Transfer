@@ -62,10 +62,14 @@ def test_scan_folder(mock_run, mock_walk, tmp_path):
     )
 
 @patch("ModelManager.create_ollama_model_file")
-def test_process_models(mock_create, tmp_path):
+@patch("ModelManager.detect_ollama_model_folder")
+def test_process_models(mock_detect, mock_create, tmp_path):
+    mock_detect.return_value = str(tmp_path/"models")
+    BackUp_Folder = tmp_path/"llama_backup"
+    
     model_names = ["model1", "model2"]
     process_models(model_names)
     
     assert mock_create.call_count == 2
-    mock_create.assert_any_call("model1", "ModelFile", tmp_path/"backup", tmp_path/"models")
-    mock_create.assert_any_call("model2", "ModelFile", tmp_path/"backup", tmp_path/"models")
+    mock_create.assert_any_call("model1", "ModelFile", BackUp_Folder, tmp_path/"models")
+    mock_create.assert_any_call("model2", "ModelFile", BackUp_Folder, tmp_path/"models")
