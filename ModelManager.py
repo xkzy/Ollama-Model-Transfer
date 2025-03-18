@@ -95,6 +95,13 @@ def extract_names(data):
     return ';;;'.join(names)
 
 def detect_ollama_model_folder():
+    system_paths = [
+        "/usr/share/ollama/.ollama/models",
+        "/usr/local/share/ollama/.ollama/models"
+    ]
+    for path in system_paths:
+        if os.path.exists(path):
+            return path
     return os.path.join(os.path.expanduser("~"), ".ollama", "models")
 
 def process_models(model_names):
