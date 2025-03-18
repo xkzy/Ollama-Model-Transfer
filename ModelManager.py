@@ -61,13 +61,16 @@ TEMPLATE """ + '"""' + f"""{template}""" + '"""' + "\n"
     modelfile_message = modelfile_message.strip()
     # Handle path formatting for regex matching
     model_path = str(Ollama_Model_Folder).replace('\\', '/')
-    # Match path with either quoted or unquoted format
-    pattern = fr'FROM\s+["\']?({model_path}/[^"\'\s]+)["\']?'
+    # Use the detected model path in the regex pattern
+    ollama_models_dir = detect_ollama_model_folder()
+    model_path = str(ollama_models_dir).replace('\\', '/')
+    pattern = fr'FROM\s+["\']?({re.escape(model_path)}/[^"\'\s]+)["\']?'
     model_file_location_match = re.search(pattern, modelfile_message)
-    
+
     if not model_file_location_match:
         print(f"Debug - Modelfile content:\n{modelfile_message}")
         print(f"Debug - Search pattern used: {pattern}")
+        print(f"Debug - Ollama models directory: {ollama_models_dir}")
     extracted_model_file_location = model_file_location_match.group(1) if model_file_location_match else "Model_file_location_not_found"
     
     print(f"Model gguf file found: {extracted_model_file_location}")
